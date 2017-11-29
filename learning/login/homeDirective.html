@@ -1,0 +1,12 @@
+<div class="jumbotron text-center" >
+  <h1>Home Page</h1>
+  <p>{{ message }}</p>
+  <form name="myForm" ng-controller="MyFormCtrl as ctrl">
+    Name: <input type="text" class="form-control" ng-model="user.name">
+    Email: <input type="email" class="form-control" ng-model="user.email">
+    <br/>
+    <a type="submit" ng-href="#about">
+      <button ng-click="register();" type="submit">Register</button>
+    </a>
+  </form>
+</div>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Emit and broadcast example</title>
+	<script  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+	<script  src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
+</head>
+<body>
+	<div>
+		<div ng-app="MyApp">
+			<div ng-controller="AlphaCtrl">
+				<div ng-controller="FirstCtrl"></div>
+				<div ng-controller="SecondCtrl"></div>
+			</div>
+			<div ng-controller="BravoCtrl"></div>
+			<div ng-controller="CharlieCtrl"></div>
+		</div>
+	</div>
+	<script >
+		"use strict"
+
+		var allScopes = {}
+
+		function getCtrl(ctrlName) {
+			return function($scope) {
+				$scope.$on("message", function(e, opt) {
+					console.log("controller" + ctrlName + "received message" +opt.message);
+				});
+				allScopes[ctrlName] = $scope;
+			};
+		}
+
+		angular.module("MyApp", [])
+			.controller("AlphaCtrl", getCtrl("AlphaCtrl"))
+			.controller("BravoCtrl", getCtrl("BravoCtrl"))
+			.controller("CharlieCtrl", getCtrl("CharlieCtrl"))
+			.controller("FirstCtrl", getCtrl("FirstCtrl"))
+			.controller("SecondCtrl", getCtrl("SecondCtrl"))
+			.run(function($timeout, $rootScope){
+
+				$rootScope.$on("message", function(e, opt) {
+					console.log("$rootScope received message :" + opt.message);
+				});
+
+				allScopes["root"] = $rootScope;
+
+				$timeout(function() {
+					// allScopes["SecondCtrl"].$emit("message", {
+					// 	message: "SecondCtrl emit"
+					// });
+					$rootScope.$broadcast("message", {
+						message: "app emit"
+					});
+
+				}, 10);
+				
+			});
+			
+	</script>
+</body>
+</html>

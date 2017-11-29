@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Emit and broadcast example</title>
+	<script  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+	<script  src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
+</head>
+<body>
+	<div>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<button ng-click="clickMe($event)">click me</button>
+			</div>
+		</div>
+	</div>
+	<script >
+		"use strict"
+
+		angular.module("MyApp", [])
+			.controller("MyCtrl", function($scope, $timeout){
+				$scope.clickMe = function ($event) {
+					console.log($event.target.innerText);
+
+					$scope.$eval(function() {
+						console.log("Eval:" + $event.target.innerText);
+					});
+
+					$scope.$evalAsync(function() {
+						console.log("evalAsync:" + $event.target.innerText);
+					});
+
+					$event.target.innerText = "new test ";
+				};
+			});
+
+	</script>
+</body>
+</html>

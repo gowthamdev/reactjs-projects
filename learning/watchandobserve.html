@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Emit and broadcast example</title>
+	<script  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+	<script  src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
+</head>
+<body>
+	<div>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div my-dir="{{message}}"></div>
+			</div>
+		</div>
+	</div>
+	<script >
+		"use strict"
+
+		angular.module("MyApp", [])
+			.controller("MyCtrl", function($scope, $timeout){
+				$scope.message = "Initial message";
+
+				$scope.$watch (function(thescope) {
+					console.log("watch checking for new message");
+					return thescope.message;
+				}, function(newValue, oldValue) {
+					console.log("watch : new = " + newValue);
+					console.log("watch : old = " + oldValue);
+				});
+
+				$timeout(function() {
+					$scope.message = "New message";
+				}, 2000);
+			})
+
+			.directive("myDir", function() {
+				return function(scope, element, attrs) {
+					attrs.$observe("myDir", function(newValue) {
+						console.log("observe: new=" + newValue);
+					});
+				};
+			});
+
+	</script>
+</body>
+</html>
